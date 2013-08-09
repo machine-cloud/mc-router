@@ -1,0 +1,13 @@
+{
+  "name":    "mc-router",
+  "version": "0.0.1",
+
+  "dependencies": {
+    "coffee-script": "1.2.x",
+    "serialport":    "1.1.x"
+  },
+
+  "engines": {
+    "node": "0.10.x"
+  }
+}
