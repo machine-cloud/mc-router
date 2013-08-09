@@ -27,7 +27,6 @@ exports.XBee = class XBee extends events.EventEmitter
     message += String.fromCharCode((packet.length-1) / 256)
     message += String.fromCharCode((packet.length-1) % 256)
     message += packet.toString("binary")
-    console.log "sending", new Buffer(message, "binary")
     @serial.write new Buffer(message, "binary")
     cb null
 
