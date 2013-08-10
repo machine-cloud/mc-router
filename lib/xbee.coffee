@@ -68,7 +68,7 @@ exports.XBee = class XBee extends events.EventEmitter
       data = packet.slice(1, packet.length-1)
       switch command
         when API_RX16
-          @emit "rx16",
+          @emit "message",
             sender: (data[0] << 8) + data[1]
             strength: data[2]
             options: data[3]

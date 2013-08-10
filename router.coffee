@@ -1,7 +1,9 @@
+dd   = require("./lib/dd")
 xbee = require("./lib/xbee").init("/dev/tty.usbserial-A601F1ZN")
 
-setInterval (() -> xbee.send 0x5000, "ack=test", (err) ->
-  console.log "sent ack"), 2000
-
-xbee.on "rx16", (message) ->
-  console.log "got rx16", JSON.stringify(message)
+xbee.on "message", (message) ->
+  console.log "message", JSON.stringify(message)
+  [key, value] = message.data.split("=")
+  dd.delay 1000, ->
+    xbee.send message.sender, "ack=#{key}", (err) ->
+      console.log "ack", sender:message.sender, key:key
