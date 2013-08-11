@@ -1,8 +1,11 @@
 events     = require("events")
 serialport = require("serialport")
 
-START_BYTE = 0x7e
-API_RX16   = 0x81
+XON         = 0x11
+XOFF        = 0x13
+ESCAPE_BYTE = 0x7d
+START_BYTE  = 0x7e
+API_RX16    = 0x81
 
 exports.XBee = class XBee extends events.EventEmitter
 
@@ -23,19 +26,19 @@ exports.XBee = class XBee extends events.EventEmitter
 
   send_packet: (packet, cb) ->
     message = ""
-    message += String.fromCharCode(START_BYTE)
     message += String.fromCharCode((packet.length-1) / 256)
     message += String.fromCharCode((packet.length-1) % 256)
     message += packet.toString("binary")
+    message = String.fromCharCode(START_BYTE) + @escape(message)
     @serial.write new Buffer(message, "binary")
     cb null
 
   build_packet: (args...) ->
     packet = ""
     for arg in args
-      switch typeof(arg)
-        when "number" then packet += String.fromCharCode(arg)
-        when "string" then packet += arg
+      packet += switch typeof(arg)
+        when "number" then String.fromCharCode(arg)
+        when "string" then arg
     sum = 0
     for byte in packet
       sum += byte.charCodeAt(0)
@@ -44,11 +47,32 @@ exports.XBee = class XBee extends events.EventEmitter
     new Buffer(packet, "binary")
 
   data_received: (data) =>
-    @buffer += data.toString("binary")
+    @buffer += @unescape(data)
     @parse_buffer()
 
   closed: ->
     console.log "closed"
+
+  escape: (data) ->
+    data = @escape_char(data, ESCAPE_BYTE)
+    data = @escape_char(data, XON)
+    data = @escape_char(data, XOFF)
+    data = @escape_char(data, START_BYTE)
+    data
+
+  escape_char: (data, char) ->
+    idx = -2
+    while (idx = data.indexOf(String.fromCharCode(char), idx+2)) > -1
+      escaped = data.charCodeAt(idx) ^ 0x20
+      data = data.slice(0, idx) + String.fromCharCode(ESCAPE_BYTE) + String.fromCharCode(escaped) + data.slice(idx+1)
+    data
+
+  unescape: (data) ->
+    str = data.toString("binary")
+    while (idx = str.indexOf(String.fromCharCode(ESCAPE_BYTE))) > -1
+      char = 0x20 ^ str.charCodeAt(idx+1)
+      str = str.slice(0, idx) + String.fromCharCode(char) + str.slice(idx+2)
+    str
 
   parse_buffer: ->
     return if ((pos = @buffer.indexOf(String.fromCharCode(START_BYTE))) is -1)
