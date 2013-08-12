@@ -4,6 +4,9 @@
 
   "dependencies": {
     "coffee-script": "1.2.x",
+    "mqtt":          "0.2.x",
+    "node-uuid":     "1.4.x",
+    "request":       "2.26.x",
     "serialport":    "1.1.x"
   },
 
