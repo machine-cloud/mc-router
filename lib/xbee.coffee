@@ -1,4 +1,6 @@
+dd         = require("./dd")
 events     = require("events")
+log        = require("./logger").init("router.xb")
 serialport = require("serialport")
 
 XON      = 0x11
@@ -17,8 +19,10 @@ exports.XBee = class XBee extends events.EventEmitter
       @serial.on "close", @closed
 
   send: (address, message, cb) ->
-    packet = @build_packet 0x01, 0x01, address / 256, address % 256, 0x00, message
-    @send_packet(packet, cb) if cb
+    log.start "send", address:address, message:message, (log) =>
+      packet = @build_packet 0x01, 0x01, address / 256, address % 256, 0x00, message
+      @send_packet(packet, cb)
+      log.success()
 
   command: (command, response, timeout=5000) ->
 
@@ -31,7 +35,7 @@ exports.XBee = class XBee extends events.EventEmitter
     message += packet.toString("binary")
     message = String.fromCharCode(START) + @escape(message)
     @serial.write new Buffer(message, "binary")
-    cb null
+    cb null if cb
 
   build_packet: (args...) ->
     packet = ""

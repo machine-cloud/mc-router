@@ -14,6 +14,8 @@ module.exports =
 
   merge: coffee.helpers.merge
 
+  now: -> (new Date()).getTime()
+
   reduce: (obj, start, cb) -> obj.reduce(cb, start)
 
   values: (hash) -> (val for key, val of hash)

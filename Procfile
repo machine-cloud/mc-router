@@ -1,1 +1,1 @@
-router: coffee router.coffee
+router: bin/router
