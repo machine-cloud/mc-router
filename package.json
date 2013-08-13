@@ -3,9 +3,10 @@
   "version": "0.0.1",
 
   "dependencies": {
-    "coffee-script": "1.2.x",
+    "coffee-script": "1.6.x",
     "mqtt":          "0.2.x",
     "node-uuid":     "1.4.x",
+    "nodemon":       "0.7.x",
     "request":       "2.26.x",
     "serialport":    "1.1.x"
   },
