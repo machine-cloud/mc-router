@@ -9,7 +9,7 @@ exports.MachineCloud = class MachineCloud extends events.EventEmitter
     request.get "#{@url}/service/mqtt", (err, req, body) =>
       @mqtt = require("./mqtt-url").connect(body)
       @mqtt.on "connect", =>
-        @mqtt.publish "connect", JSON.stringify(id:@id)
+        @mqtt.publish "connect", JSON.stringify(id:@id, model:"ROUTER01")
         @mqtt.subscribe @id.split(".")[0]
         @mqtt.subscribe @id
       @mqtt.on "message", (topic, body) =>

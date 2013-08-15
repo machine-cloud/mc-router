@@ -17,15 +17,15 @@ request.get "#{process.env.SERVICE_URL}/service/mqtt", (err, req, body) ->
   xbee.on "message", (message) ->
 
     # add to the device list
-    devices.add "sensor.#{message.sender}", (old) ->
-
-      # if it doesn't already exist in the list, send a registration message
-      mc.send "connect", id:"sensor.#{message.sender}" unless old
+    devices.add "sensor.#{message.sender}", ->
 
       log.start "message", (log) ->
 
         # split the data from key=value
         [message.key, message.value] = message.data.split("=")
+
+        # we get the model keyword on connection
+        mc.send "connect", id:"sensor.#{message.sender}", model:message.value if message.key is "model"
 
         # send the metric as a tick
         mc.send "tick", id:"sensor.#{message.sender}", strength:message.strength, key:message.key, value:message.value
