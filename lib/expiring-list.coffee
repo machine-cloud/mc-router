@@ -19,5 +19,8 @@ exports.ExpiringList = class ExpiringList extends events.EventEmitter
   list: ->
     dd.keys(@list)
 
+  count: ->
+    dd.keys(@list).length
+
 exports.init = (args...) ->
   new ExpiringList(args...)
