@@ -8,7 +8,8 @@
     "node-uuid":     "1.4.x",
     "nodemon":       "0.7.x",
     "request":       "2.26.x",
-    "serialport":    "1.1.x"
+    "serialport":    "1.1.x",
+    "logfmt":        "0.13.x"
   },
 
   "engines": {
