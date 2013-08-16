@@ -12,7 +12,7 @@ request.get "#{process.env.SERVICE_URL}/service/mqtt", (err, req, body) ->
     console.log "topic", topic
     console.log "body", body
 
-  xbee = require("./lib/xbee").init("/dev/tty.usbserial-A601F1ZN")
+  xbee = require("./lib/xbee").init(process.env.XBEE_TTY)
 
   xbee.on "message", (message) ->
 
