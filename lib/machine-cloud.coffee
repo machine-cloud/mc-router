@@ -16,6 +16,9 @@ exports.MachineCloud = class MachineCloud extends events.EventEmitter
       dd.every 2000, =>
         @send "tick", id:@id, key:"model", value:"ROUTER01"
 
+  subscribe: (id, cb) ->
+    @mqtt.subscribe "device.#{id}", cb
+
   send: (topic, message) ->
     log.start "send", dd.merge(message, topic:topic), (log) =>
       @mqtt.publish topic, JSON.stringify(message), (err) ->
