@@ -9,7 +9,10 @@ request.get "#{process.env.SERVICE_URL}/service/mqtt", (err, req, body) ->
   mc = require("./lib/machine-cloud").init(process.env.ID, process.env.MACHINE_CLOUD_URL)
 
   mc.on "message", (topic, message) ->
-    xbee.send parseInt(/device\.sensor\.(.*)$/.exec(topic)[1]), "#{message.key}=#{message.value}"
+    try
+      xbee.send parseInt(/device\.sensor\.(.*)$/.exec(topic)[1]), "#{message.key}=#{message.value}"
+    catch err
+      console.log "err", err
 
   xbee = require("./lib/xbee").init(process.env.XBEE_TTY)
 

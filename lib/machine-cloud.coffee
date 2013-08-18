@@ -12,6 +12,7 @@ exports.MachineCloud = class MachineCloud extends events.EventEmitter
         @mqtt.subscribe @id.split(".")[0]
         @mqtt.subscribe @id
       @mqtt.on "message", (topic, body) =>
+        topic = topic.replace(/\//g, ".") # not sure wtf is going on
         @emit "message", topic, JSON.parse(body)
       dd.every 2000, =>
         @send "tick", id:@id, key:"model", value:"ROUTER01"
