@@ -21,7 +21,6 @@ request.get "#{process.env.SERVICE_URL}/service/mqtt", (err, req, body) ->
       log.start "message", (log) ->
         [message.key, message.value] = message.data.split("=")
         mc.send "tick", id:"sensor.#{message.sender}", strength:message.strength, key:message.key, value:message.value
-        dd.delay 1000, -> xbee.send message.sender, "ack=#{message.key}"
         mc.subscribe "sensor.#{message.sender}" unless old
         log.success()
 
