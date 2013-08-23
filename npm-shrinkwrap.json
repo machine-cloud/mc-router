@@ -163,23 +163,21 @@
       }
     },
     "logfmt": {
-      "version": "0.13.0",
-      "from": "logfmt@0.13.x",
+      "version": "0.14.1",
+      "from": "logfmt@0.14.1",
+      "resolved": "https://registry.npmjs.org/logfmt/-/logfmt-0.14.1.tgz",
       "dependencies": {
         "split": {
-          "version": "0.2.6",
-          "from": "split@0.2.6",
-          "resolved": "https://registry.npmjs.org/split/-/split-0.2.6.tgz"
+          "version": "0.2.10",
+          "from": "split@0.2.x"
         },
         "through": {
           "version": "2.3.4",
-          "from": "through@2.3.4",
-          "resolved": "https://registry.npmjs.org/through/-/through-2.3.4.tgz"
+          "from": "through@2.3.x"
         },
         "readable-stream": {
-          "version": "1.0.2",
-          "from": "https://registry.npmjs.org/readable-stream/-/readable-stream-1.0.2.tgz",
-          "resolved": "https://registry.npmjs.org/readable-stream/-/readable-stream-1.0.2.tgz"
+          "version": "1.0.15",
+          "from": "readable-stream@1.0.x"
         }
       }
     }

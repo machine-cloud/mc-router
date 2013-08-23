@@ -1,6 +1,6 @@
 dd      = require("./dd")
 events  = require("events")
-log     = require("./logger").init("router.mc")
+logfmt  = require('logfmt').namespace(ns: 'router.mc')
 request = require("request")
 
 exports.MachineCloud = class MachineCloud extends events.EventEmitter
@@ -17,9 +17,9 @@ exports.MachineCloud = class MachineCloud extends events.EventEmitter
         @send "tick", id:@id, key:"model", value:"ROUTER01"
 
   send: (topic, message) ->
-    log.start "send", dd.merge(message, topic:topic), (log) =>
+    logfmt.time dd.merge(message, at: 'send', topic: topic), (logger) =>
       @mqtt.publish topic, JSON.stringify(message), (err) ->
-        if err then log.error(err) else log.success()
+        if err then log.log(error: err.message) else logger.log()
 
 exports.init = (args...) ->
   new MachineCloud(args...)

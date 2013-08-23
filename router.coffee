@@ -1,5 +1,5 @@
 dd      = require("./lib/dd")
-log     = require("./lib/logger").init("router")
+logfmt  = require('logfmt').namespace(ns: 'router')
 request = require("request")
 
 devices = require("./lib/expiring-list").init()
@@ -16,11 +16,11 @@ request.get "#{process.env.SERVICE_URL}/service/mqtt", (err, req, body) ->
 
   xbee.on "message", (message) ->
     devices.add "sensor.#{message.sender}", ->
-      log.start "message", (log) ->
+      logfmt.time message, (logger) ->
         [message.key, message.value] = message.data.split("=")
         mc.send "tick", id:"sensor.#{message.sender}", strength:message.strength, key:message.key, value:message.value
         dd.delay 1000, -> xbee.send message.sender, "ack=#{message.key}"
-        log.success()
+        logger.log()
 
   devices.on "expire", (id) -> mc.send "disconnect", id:id
 

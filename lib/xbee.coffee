@@ -1,7 +1,7 @@
 dd         = require("./dd")
 events     = require("events")
-log        = require("./logger").init("router.xb")
 serialport = require("serialport")
+logfmt     = require('logfmt').namespace(ns: 'router.xb')
 
 XON      = 0x11
 XOFF     = 0x13
@@ -19,10 +19,10 @@ exports.XBee = class XBee extends events.EventEmitter
       @serial.on "close", @closed
 
   send: (address, message, cb) ->
-    log.start "send", address:address, message:message, (log) =>
+    logfmt.time at: 'send', (logger) =>
       packet = @build_packet 0x01, 0x01, address / 256, address % 256, 0x00, message
       @send_packet(packet, cb)
-      log.success()
+      logger.log(address:address, message:message)
 
   command: (command, response, timeout=5000) ->
 
