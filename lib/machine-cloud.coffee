@@ -7,7 +7,7 @@ exports.MachineCloud = class MachineCloud extends events.EventEmitter
 
   constructor: (@id, @url) ->
     request.get "#{@url}/service/mqtt", (err, req, body) =>
-      dd.delay 10000, -> process.exit() if err
+      dd.delay 3000, -> process.exit() if err
       @mqtt = require("./mqtt-url").connect(body)
       @mqtt.on "connect", =>
         @mqtt.subscribe @id.split(".")[0]
